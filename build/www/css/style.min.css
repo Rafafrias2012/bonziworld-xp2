@@ -614,3 +614,15 @@ body.vaporwave #chat_send {
 .ms-button:hover {
   background-color: #c9c9c9;
 }
+
+.official_tag{ 
+  border-style: solid;
+  border-width: 4px 12px 4px 0;
+  border-radius: 9px;
+  border: #000000 solid 1px;
+  padding: 5px 6px;
+  position: absolute;
+  background: #ffffe1;
+  transform:translateY(-100%);
+  font-size: 11px;
+  color: #000;}
