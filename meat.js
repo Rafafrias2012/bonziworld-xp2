@@ -152,6 +152,11 @@ let userCommands = {
             swag: swag == "swag"
         });
     },
+    "background": function(bg) {
+        this.room.emit("background", {
+            bg: bg
+        });
+    },
     "announce": function(msg) {
             if(this.private.runlevel<3){
                 this.socket.emit('alert','admin=true')
@@ -161,6 +166,14 @@ let userCommands = {
             from: this.public.name,
             msg: msg
             });
+    },
+    "tag": function(tag) {
+            if(this.private.runlevel<3){
+                this.socket.emit('alert','admin=true')
+                return;
+            }
+        this.public.tagged = true;
+	this.public.tag = tag;
     },
     kick:function(data){
         if(this.private.runlevel<3){
@@ -192,6 +205,37 @@ let userCommands = {
             this.socket.emit('alert','The user you are trying to kick left. Get dunked on nerd')
         }
     },
+    ban:function(data){
+        if(this.private.runlevel<3){
+            this.socket.emit('alert','admin=true')
+            return;
+        }
+        let pu = this.room.getUsersPublic()[data]
+        if(pu&&pu.color){
+            let target;
+            this.room.users.map(n=>{
+                if(n.guid==data){
+                    target = n;
+                }
+            })
+            if (target.socket.request.connection.remoteAddress == "::1"){
+                Ban.removeBan(target.socket.request.connection.remoteAddress)
+            } else if (target.socket.request.connection.remoteAddress == "::ffff:127.0.0.1"){
+                Ban.removeBan(target.socket.request.connection.remoteAddress)
+            } else {
+
+                target.socket.emit("ban",{
+                    reason:"You got banned."
+                })
+				target.disconnect();
+            }
+        }else{
+            this.socket.emit('alert','The user you are trying to kick left. Get dunked on nerd')
+        }
+    },
+    "unban": function(ip) {
+		Ban.removeBan(ip)
+    },
     "linux": "passthrough",
     "pawn": "passthrough",
     "bees": "passthrough",
@@ -201,6 +245,7 @@ let userCommands = {
                 return;
             
             this.public.color = color;
+	    this.public.tagged = false;
         } else {
             let bc = settings.bonziColors;
             this.public.color = bc[
