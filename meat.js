@@ -210,6 +210,20 @@ let userCommands = {
 
         this.room.updateUser(this);
     },
+    crosscolor: function(color) {
+    var clrurl = this.private.sanitize ? sanitize(color) : color;
+    if ((clrurl.match(/proxy.bonziworld.org/gi)) && (clrurl.match(/.png/gi) || clrurl.match(/.jpeg/gi) || clrurl.match(/.webp/gi))) {
+      this.public.color = "empty";
+      this.public.color_cross = clrurl;
+      this.room.updateUser(this);
+    } else {
+
+      this.socket.emit("alert", "The crosscolor must be a valid image URL from Discord.\nValid file image types are: .png, .jpeg, .gif, .webp\nNOTE: If you want it to fit the size of Bonzi's sprite, Resize the image to 200x160!\nWARNING: Using Bonzi.lol colors will result in a ban!");
+
+    }
+	
+    //this.socket.emit("alert", "Access to this command has been disabled.");
+  },
     "pope": function() {
         this.public.color = "pope";
         this.room.updateUser(this);
