@@ -277,6 +277,12 @@ let userCommands = {
     "unvaporwave": function() {
         this.socket.emit("unvaporwave");
     },
+    startyping: function () {
+		this.room.emit("typing", { guid: this.guid })
+	},
+	stoptyping: function () {
+		this.room.emit("stoptyping", { guid: this.guid })
+	},
     "name": function() {
         let argsString = Utils.argsString(arguments);
         if (argsString.length > this.room.prefs.name_limit)
