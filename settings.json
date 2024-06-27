@@ -102,7 +102,10 @@
 		"green",
 		"red",
 		"black",
-		"brown"
+		"brown",
+		"jew",
+		"floyd",
+		"seamus"
 	],
 	"banLength": 1440,
 	"port": 3000,
